@@ -1,12 +1,12 @@
 // ==UserScript==
 // @name         Central de Automações - Equipe
 // @namespace    http://tampermonkey.net/
-// @version      1.4
+// @version      1.5
 // @description  Instalador único para todas as ferramentas da equipe.
 // @author       ankiendev
 // @match        https://web.pontoicarus.com.br/*
 // @match        https://monitoring.cloud.kiper.com.br/condominiums/*
-// @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ponto.user.js?v=5
+// @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ponto.user.js?v=6
 // @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/licencas.user.js?v=3
 // @downloadURL  https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ativador.user.js
 // @updateURL    https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ativador.user.js
