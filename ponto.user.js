@@ -1,9 +1,9 @@
 // ==UserScript==
-// @name         Icarus Stealth Pro
+// @name         Icarus Pro v6.6 - Graphite Edition
 // @namespace    http://tampermonkey.net/
 // @version      6.6
-// @description  Automação estável para equipe - Graphite Edition + JS Force Color.
-// @author       Gemini AI (Guided by ankiendev)
+// @description  Cores ajustadas para Cinza Graphite (Code Block Style), pílula arredondada e calendário visível com fix de botões.
+// @author       ankiendev
 // @match        https://web.pontoicarus.com.br/*
 // @grant        none
 // @downloadURL  https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ponto.user.js
@@ -23,8 +23,7 @@
     const today = getTodayStr();
 
     const style = document.createElement('style');
-    style.id = "icarus-pro-style-v61";
-    document.head.appendChild(style);
+    style.id = "icarus-pro-style-v66";
 
     style.innerHTML = `
         /* --- DOCK PÍLULA NO TOPO (CINZA GRAPHITE) --- */
@@ -48,7 +47,7 @@
 
         /* --- PAINEL (ESTILO CODE BLOCK) --- */
         #icarus-pro-panel {
-            --ic-bg: #212121; /* CINZA GRAPHITE IGUAL AO BLOCO DE CÓDIGO */
+            --ic-bg: #212121;
             --ic-text: #e0e0e0;
             --ic-border: #333333;
             --ic-input-bg: #181818;
@@ -103,7 +102,31 @@
         .btn-main:hover { background: #3498db !important; transform: translateY(-1px); }
         .panic-btn { background: #e74c3c !important; margin-top: 8px !important; }
         .panic-btn:hover { background: #c0392b !important; }
+
+        /* --- NUCLEAR FIX PARA OS BOTÕES DO ICARUS --- */
+        html body .p-dialog .p-dialog-footer button, 
+        html body .p-button.p-button-success,
+        html body .p-button:not(.p-button-secondary):not(.p-button-danger) {
+            background-color: #2ecc71 !important;
+            background: #2ecc71 !important;
+            color: #ffffff !important;
+            border: 1px solid #2ecc71 !important;
+            opacity: 1 !important;
+        }
+
+        html body .p-dialog .p-dialog-footer button:hover, 
+        html body .p-button.p-button-success:hover,
+        html body .p-button:not(.p-button-secondary):not(.p-button-danger):hover {
+            background-color: #27ae60 !important;
+            background: #27ae60 !important;
+            border-color: #27ae60 !important;
+        }
     `;
+
+    // Injeta com delay para garantir que o estilo do site já carregou e o nosso ganhe
+    setTimeout(() => {
+        document.head.appendChild(style);
+    }, 1000);
 
     const topDock = document.createElement('div');
     topDock.id = "ic-top-dock";
@@ -133,7 +156,7 @@
 
     const updateStatus = (status) => {
         topDock.className = `st-${status}`;
-        document.getElementById('header-led-container').className = `st-${status}`;
+        if(document.getElementById('header-led-container')) document.getElementById('header-led-container').className = `st-${status}`;
     };
 
     const togglePanel = () => {
