@@ -2,7 +2,7 @@
 // @name         Gerador de Payload - v3.5 Spy Edition
 // @namespace    http://tampermonkey.net/
 // @version      3.5.1
-// @description  Design v3.5 preservado + Supervisor de persistência (Anti-SPA).
+// @description  Design v3.5 Original + Supervisor de persistência (Anti-SPA).
 // @author       Gemini AI
 // @match        https://monitoring.cloud.kiper.com.br/*
 // @grant        none
@@ -13,7 +13,7 @@
 
     let isDrag = false;
 
-    // --- FUNÇÃO QUE RENDERIZA O DESIGN ORIGINAL ---
+    // --- FUNÇÃO QUE RENDERIZA O DESIGN E AS REGRAS ---
     function renderApp() {
         if (document.getElementById('rpa-panel')) return;
 
@@ -21,51 +21,25 @@
         style.id = "rpa-master-style-v35";
         document.head.appendChild(style);
 
-        // O SEU CSS ORIGINAL SEM ALTERAÇÕES
         style.innerHTML = `
             #rpa-panel {
-                --rpa-bg: #f7fef8;
-                --rpa-header: #0d5b61;
-                --rpa-text: #1c2026;
-                --rpa-header-text: #ffffff;
-                --rpa-border: #d1e0d3;
-                --rpa-item: #ebf4ec;
-                --rpa-input: #ffffff;
-                --rpa-green: #268e60;
-                --rpa-green-alpha: rgba(38, 142, 96, 0.15);
-
+                --rpa-bg: #f7fef8; --rpa-header: #0d5b61; --rpa-text: #1c2026;
+                --rpa-header-text: #ffffff; --rpa-border: #d1e0d3; --rpa-item: #ebf4ec;
+                --rpa-input: #ffffff; --rpa-green: #268e60; --rpa-green-alpha: rgba(38, 142, 96, 0.15);
                 position: fixed; top: 200px; right: 20px; z-index: 2147483647;
                 background: var(--rpa-bg) !important; border-radius: 10px !important; width: 340px !important;
                 box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important; border: 1px solid var(--rpa-border) !important;
                 font-family: 'Inter', sans-serif !important; color: var(--rpa-text) !important;
-                overflow: hidden !important;
-                transition: width 0.3s, height 0.3s, opacity 0.3s, background 0.3s !important;
-                display: none;
-                will-change: transform;
+                overflow: hidden !important; transition: width 0.3s, height 0.3s, opacity 0.3s !important;
+                display: none; will-change: transform;
             }
-
-            #rpa-panel.dark-mode {
-                --rpa-bg: #1c2026;
-                --rpa-header: #0a2e34;
-                --rpa-text: #f7fef8;
-                --rpa-border: #2c333c;
-                --rpa-item: #242930;
-                --rpa-input: #12151a;
-                --rpa-green-alpha: rgba(38, 142, 96, 0.3);
-            }
-
-            #rpa-panel.is-minimized {
-                display: flex !important; width: 26px !important; height: 150px !important; right: -2px !important;
-                border-radius: 10px 0 0 10px !important; opacity: 0.6; cursor: pointer !important; border-right: none !important;
-            }
-            #rpa-panel.is-minimized:hover { opacity: 1; }
+            #rpa-panel.dark-mode { --rpa-bg: #1c2026; --rpa-header: #0a2e34; --rpa-text: #f7fef8; --rpa-border: #2c333c; --rpa-item: #242930; --rpa-input: #12151a; --rpa-green-alpha: rgba(38, 142, 96, 0.3); }
+            #rpa-panel.is-minimized { display: flex !important; width: 26px !important; height: 150px !important; right: -2px !important; border-radius: 10px 0 0 10px !important; opacity: 0.6; cursor: pointer !important; border-right: none !important; }
             #rpa-panel.is-minimized #rpa-header { padding: 0 !important; height: 100% !important; border-bottom: none !important; justify-content: center !important; width: 100% !important;}
             #rpa-panel.is-minimized #rpa-header span { writing-mode: vertical-rl; transform: rotate(180deg); font-size: 10px !important; font-weight: 600; letter-spacing: 1px; white-space: nowrap !important; }
             #rpa-panel.is-minimized #rpa-content, #rpa-panel.is-minimized #rpa-toggle { display: none !important; }
-
             #rpa-header { background: var(--rpa-header) !important; color: var(--rpa-header-text) !important; padding: 12px 15px !important; cursor: move !important; display: flex !important; justify-content: space-between !important; align-items: center !important; border-bottom: 1px solid var(--rpa-border) !important; }
             #rpa-header span { font-weight: 700 !important; font-size: 12px !important; text-transform: uppercase; user-select: none; }
-
             #rpa-content { padding: 16px !important; }
             .rpa-label { font-size: 10px !important; font-weight: 800 !important; color: var(--rpa-green) !important; text-transform: uppercase !important; margin-bottom: 6px !important; display: block !important; }
             .rpa-input { width: 100% !important; padding: 10px !important; background: var(--rpa-input) !important; border: 1px solid var(--rpa-border) !important; border-radius: 6px !important; color: var(--rpa-text) !important; font-size: 13px !important; margin-bottom: 16px !important; outline: none !important;}
@@ -95,7 +69,6 @@
         `;
         document.body.appendChild(panel);
 
-        // --- LISTA ---
         const licencas = [
             { id: "remote_concierge", label: "Portaria Remota", m: false },
             { id: "access_control", label: "Controle de Acesso", m: false },
@@ -113,66 +86,48 @@
         licencas.forEach(l => {
             const item = document.createElement('div');
             item.className = 'rpa-item';
-            item.dataset.id = l.id;
-            item.dataset.multi = l.m;
+            item.dataset.id = l.id; item.dataset.multi = l.m;
             item.innerHTML = `<label>${l.label}</label>${l.m ? `<input type="number" id="qty_${l.id}" value="1" min="1" class="rpa-qty-input">` : '<span style="font-size:9px; opacity:0.6; font-weight:bold;">1 UN</span>'}`;
             item.onclick = (e) => { if(!e.target.classList.contains('rpa-qty-input')) item.classList.toggle('is-selected'); };
             list.appendChild(item);
         });
 
-        // --- LISTENERS (ARRASTE E BOTÕES) ---
+        // MOTOR DE ARRASTE
         let startX, startY, initialLeft, initialTop;
-
-        const moveHandler = (e) => {
-            if (!isDrag) return;
-            window.requestAnimationFrame(() => {
-                panel.style.left = (initialLeft + (e.clientX - startX)) + 'px';
-                panel.style.top = (initialTop + (e.clientY - startY)) + 'px';
-            });
-        };
-
-        const stopDrag = () => {
-            isDrag = false;
-            window.removeEventListener('mousemove', moveHandler);
-            window.removeEventListener('mouseup', stopDrag);
-        };
-
         document.getElementById('rpa-header').addEventListener('mousedown', (e) => {
             if (panel.classList.contains('is-minimized')) {
                 panel.classList.remove('is-minimized');
-                panel.style.right = 'auto';
-                panel.style.left = (window.innerWidth - 360) + 'px';
-                panel.style.display = 'block';
-                return;
+                panel.style.right = 'auto'; panel.style.left = (window.innerWidth - 360) + 'px';
+                panel.style.display = 'block'; return;
             }
-            isDrag = true;
-            startX = e.clientX; startY = e.clientY;
+            isDrag = true; startX = e.clientX; startY = e.clientY;
             initialLeft = panel.offsetLeft; initialTop = panel.offsetTop;
-            window.addEventListener('mousemove', moveHandler);
-            window.addEventListener('mouseup', stopDrag);
+            const moveHandler = (ev) => {
+                if (!isDrag) return;
+                window.requestAnimationFrame(() => {
+                    panel.style.left = (initialLeft + (ev.clientX - startX)) + 'px';
+                    panel.style.top = (initialTop + (ev.clientY - startY)) + 'px';
+                });
+            };
+            const stopDrag = () => { isDrag = false; window.removeEventListener('mousemove', moveHandler); window.removeEventListener('mouseup', stopDrag); };
+            window.addEventListener('mousemove', moveHandler); window.addEventListener('mouseup', stopDrag);
         });
 
-        document.querySelectorAll('.rpa-qty-input, #rpa-personId').forEach(i => i.onmousedown = (e) => e.stopPropagation());
-
-        document.getElementById('rpa-toggle').onclick = (e) => {
-            e.stopPropagation();
-            panel.classList.add('is-minimized');
-            panel.style.left = 'auto';
-            panel.style.display = 'flex';
-        };
-
+        document.getElementById('rpa-toggle').onclick = (e) => { e.stopPropagation(); panel.classList.add('is-minimized'); panel.style.left = 'auto'; panel.style.display = 'flex'; };
+        
+        // REGRAS DE GERAÇÃO E CÓPIA
         document.getElementById('rpa-generate').onclick = () => {
             const pId = document.getElementById('rpa-personId').value;
             const selected = document.querySelectorAll('.rpa-item.is-selected');
-            if (selected.length === 0) return alert("Selecione uma licença.");
+            if (!pId || selected.length === 0) return alert("Selecione licenças e verifique o ID.");
             let sel = [];
             selected.forEach(item => {
                 const q = item.dataset.multi === "true" ? (parseInt(document.getElementById(`qty_${item.dataset.id}`).value) || 1) : 1;
                 sel.push({ licenseType: item.dataset.id, pendingSettings: false, licenseQuantity: q });
             });
-            document.getElementById('rpa-output').textContent = JSON.stringify({ personContextId: parseInt(pId), name: "erpLicense", value: JSON.stringify({ licenses: sel }) }, null, 2);
-            document.getElementById('rpa-output').style.display = 'block';
-            document.getElementById('rpa-copy').style.display = 'block';
+            const out = document.getElementById('rpa-output');
+            out.textContent = JSON.stringify({ personContextId: parseInt(pId), name: "erpLicense", value: JSON.stringify({ licenses: sel }) }, null, 2);
+            out.style.display = 'block'; document.getElementById('rpa-copy').style.display = 'block';
         };
 
         document.getElementById('rpa-copy').onclick = () => {
@@ -181,36 +136,32 @@
                 s.style.display = 'block'; setTimeout(() => s.style.display = 'none', 2500);
             });
         };
+
+        document.querySelectorAll('.rpa-qty-input, #rpa-personId').forEach(i => i.onmousedown = (e) => e.stopPropagation());
     }
 
-    // --- O SUPERVISOR (Roda o syncAll e verifica existência) ---
+    // --- SUPERVISOR (Vigia a existência e os dados) ---
     function supervisor() {
         const isCondo = window.location.href.includes('/condominiums/');
         const panel = document.getElementById('rpa-panel');
 
         if (isCondo) {
-            // Se estou no site mas o painel sumiu, recria
-            if (!panel) {
-                renderApp();
-            } else {
-                // Sincronia de estado original
-                if (!isDrag) {
-                    panel.style.display = panel.classList.contains('is-minimized') ? 'flex' : 'block';
-                }
-
+            if (!panel) renderApp();
+            const currentPanel = document.getElementById('rpa-panel');
+            if (currentPanel && !isDrag) {
+                currentPanel.style.display = currentPanel.classList.contains('is-minimized') ? 'flex' : 'block';
+                
                 // Auto-ID
                 const idMatch = window.location.href.match(/\/condominiums\/(\d+)/);
                 const inputId = document.getElementById('rpa-personId');
-                if (idMatch && inputId && document.activeElement !== inputId) {
-                    inputId.value = idMatch[1];
-                }
+                if (idMatch && inputId && document.activeElement !== inputId) inputId.value = idMatch[1];
 
-                // Tema
+                // Dark Mode
                 const bodyBg = window.getComputedStyle(document.body).backgroundColor;
                 const rgb = bodyBg.match(/\d+/g);
                 if (rgb) {
                     const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
-                    if (brightness < 200) panel.classList.add('dark-mode'); else panel.classList.remove('dark-mode');
+                    if (brightness < 200) currentPanel.classList.add('dark-mode'); else currentPanel.classList.remove('dark-mode');
                 }
             }
         } else if (panel) {
@@ -218,7 +169,6 @@
         }
     }
 
-    // Loop do Supervisor (1.5s para não pesar)
     setInterval(supervisor, 1500);
     supervisor();
 })();
