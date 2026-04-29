@@ -7,9 +7,9 @@
 // @match        https://web.pontoicarus.com.br/*
 // @match        https://monitoring.cloud.kiper.com.br/condominiums/*
 // @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ponto.user.js?v=1
-// @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ativador.user.js?v=1
-// @downloadURL  https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/central-equipe.user.js
-// @updateURL    https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/central-equipe.user.js
+// @require      https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/licencas.user.js?v=1
+// @downloadURL  https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ativador.user.js
+// @updateURL    https://raw.githubusercontent.com/ankiendev/automacoes-equipe/main/ativador.user.js
 // @grant        none
 // ==/UserScript==
 
