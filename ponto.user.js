@@ -1,8 +1,8 @@
 // ==UserScript==
 // @name         Icarus Stealth Pro
 // @namespace    http://tampermonkey.net/
-// @version      6.1
-// @description  Automação estável para equipe - Graphite Edition.
+// @version      6.2
+// @description  Automação estável para equipe - Graphite Edition + Button Fix.
 // @author       Gemini AI (Guided by ankiendev)
 // @match        https://web.pontoicarus.com.br/*
 // @grant        none
@@ -23,7 +23,7 @@
     const today = getTodayStr();
 
     const style = document.createElement('style');
-    style.id = "icarus-pro-style-v61";
+    style.id = "icarus-pro-style-v62";
     document.head.appendChild(style);
 
     style.innerHTML = `
@@ -48,11 +48,10 @@
 
         /* --- PAINEL (ESTILO CODE BLOCK) --- */
         #icarus-pro-panel {
-            --ic-bg: #212121; /* CINZA GRAPHITE IGUAL AO BLOCO DE CÓDIGO */
+            --ic-bg: #212121;
             --ic-text: #e0e0e0;
             --ic-border: #333333;
             --ic-input-bg: #181818;
-
             position: fixed; top: 40px; right: 20px; z-index: 2147483646;
             background: var(--ic-bg) !important; border-radius: 14px !important; width: 340px !important;
             box-shadow: 0 12px 40px rgba(0,0,0,0.7) !important; border: 1px solid var(--ic-border) !important;
@@ -80,7 +79,6 @@
             outline: none !important;
         }
         .pro-input:focus { border-color: #2980b9 !important; }
-
         .pro-input::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; }
 
         #progress-container { width: 100%; background: #000; height: 10px; border-radius: 5px; margin: 10px 0; position: relative; overflow: hidden; display: none; border: 1px solid #333; }
@@ -90,7 +88,7 @@
         #ic-logs {
             background: #181818 !important; color: #2ecc71 !important; padding: 10px !important;
             border-radius: 8px !important; height: 100px !important; overflow-y: auto !important;
-            font-family: 'Fira Code', monospace !important; font-size: 10px !important;
+            font-family: monospace !important; font-size: 10px !important;
             margin-top: 10px !important; border: 1px solid #333 !important;
         }
 
@@ -103,6 +101,21 @@
         .btn-main:hover { background: #3498db !important; transform: translateY(-1px); }
         .panic-btn { background: #e74c3c !important; margin-top: 8px !important; }
         .panic-btn:hover { background: #c0392b !important; }
+
+        /* --- FIX: FORÇAR FUNDO VERDE NOS BOTÕES DO ICARUS --- */
+        .p-dialog .p-dialog-footer button.p-button,
+        button.p-button.p-button-success,
+        .MuiButton-containedPrimary {
+            background-color: #2ecc71 !important;
+            color: white !important;
+            border: 1px solid #2ecc71 !important;
+            opacity: 1 !important;
+            padding: 8px 16px !important;
+        }
+        .p-dialog .p-dialog-footer button.p-button:hover,
+        button.p-button.p-button-success:hover {
+            background-color: #27ae60 !important;
+        }
     `;
 
     const topDock = document.createElement('div');
@@ -178,7 +191,6 @@
         document.getElementById('btn-panic').style.display = "block";
         document.getElementById('progress-container').style.display = "block";
         document.getElementById('ic-logs').innerHTML = "";
-
         log("🎬 Sequência iniciada.");
 
         const dataBase = document.getElementById('data-fixa').value;
