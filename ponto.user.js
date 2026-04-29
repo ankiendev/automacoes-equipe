@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Icarus Stealth Pro
 // @namespace    http://tampermonkey.net/
-// @version      6.5
+// @version      6.6
 // @description  Automação estável para equipe - Graphite Edition + JS Force Color.
 // @author       Gemini AI (Guided by ankiendev)
 // @match        https://web.pontoicarus.com.br/*
