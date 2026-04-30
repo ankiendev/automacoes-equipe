@@ -1,15 +1,17 @@
 // ==UserScript==
 // @name         Gerador de Condomínio
 // @namespace    http://tampermonkey.net/
-// @version      1.1
+// @version      1.2
 // @description  Gerador de JSON de criação de condomínio
 // @author       Gemini AI
 // @match        https://monitoring.cloud.kiper.com.br/condominiums
 // @grant        none
 // ==/UserScript==
 
-(function() {
-    'use strict';
+function carregarCondominio() {
+    // Evita duplicidade se a função for chamada múltiplas vezes
+    if (window.condominioInicializado) return;
+    window.condominioInicializado = true;
 
     let isDrag = false;
     let isMinimized = true;
@@ -250,4 +252,4 @@
 
     setInterval(supervisor, 1500);
     supervisor();
-})();
+}
